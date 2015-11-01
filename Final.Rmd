@@ -4,7 +4,7 @@ author: "Shiting Zhu, Lijing Wang, Jingting Li"
 date: "November 1, 2015"
 output: pdf_document
 ---
-
+Gibbs Part
 ```{r}
 Gibbs_<-function(x0,y0,iterations,B=5,burnIn=0)
 ## 5 parameters are needed in this function, with B=5 and burnIn=0 by default
