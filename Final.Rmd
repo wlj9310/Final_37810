@@ -5,5 +5,37 @@ date: "November 1, 2015"
 output: pdf_document
 ---
 
-This is a test
-For 37810
+```{r}
+Gibbs_<-function(x0,y0,iterations,B=5,burnIn=0)
+## 5 parameters are needed in this function, with B=5 and burnIn=0 by default
+{
+  if(x0>0&&x0<B&&y0>0&&y0<B)
+## to check whether the starting values are in the domain.    
+  {
+    x<-c(x0,rep(NA,iterations-1))
+## Initialize the Markov chain    
+    y<-c(y0,rep(NA,iterations-1))
+## Initialize the Markov chain    
+    for(i in 1:(iterations-1))
+    {
+      x[i+1]<-(-log(1-runif(1)*(1-exp(-y[i]*B)))/y[i])
+## use inverse transform sampling to draw sample from conditional distribution 
+## p(x^{i+1}|y^{i})   
+      y[i+1]<-(-log(1-runif(1)*(1-exp(-x[i+1]*B)))/x[i+1])
+## use inverse transform sampling to draw sample from conditional distribution 
+## p(y^{i+1}|x^{i+1})     
+    }
+    if(burnIn>0)
+    {
+        x<-x[-(1:burnIn)]
+        y<-y[-(1:burnIn)]
+        print(length(x))
+## discard the first bunch of draws for the burn-in process    
+    }
+    return(data.frame(x,y))
+  }
+ else
+   stop("Initial values incorrect")
+## print the information for incorrect starting values  
+}
+```
