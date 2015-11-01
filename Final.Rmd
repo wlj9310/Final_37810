@@ -63,10 +63,12 @@ graph <- function(Cs){
 # Always got error complaining plot exceeds margin.
 # graph(Cs)
 ```
+![Caption for the picture.](/Users/Stacy/Desktop/result.pdf)
 
 
 
 Gibbs Part
+
 ## Gibbs Sampling
 
 ```{r}
