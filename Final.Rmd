@@ -7,9 +7,45 @@ output: pdf_document
 
 
 ## Question 1
-Test 3
+```{r}
+Alpha <- 6
+Beta <- 4
+# phi cannot be 0 or 1
+phi <- function(c,oldphi){
+  newphi = 0
+  while (newphi == 0 || newphi == 1){
+  newphi = rbeta(1,c*oldphi,c*(1-oldphi))
+  }
+  return(newphi)
+}
 
-=======
+run_metropolis_MCMC <- function(startvalue,c,iterations){
+  chain = rep(0, iterations+1)
+  chain[1] = startvalue
+  for (i in 1:iterations){
+    phi = phi(c,chain[i])
+    proposal = dbeta(chain[i],c*phi,c*(1-phi))/dbeta(phi,c*chain[i],c*(1-chain[i]))
+    posterior = dbeta(phi,Alpha,Beta)/dbeta(chain[i],Alpha,Beta)
+    probab = proposal*posterior
+    if (runif(1) < probab){
+      chain[i+1] = phi
+    }else{
+      chain[i+1] = chain[i]
+    }
+  }
+  return(chain)
+}
+
+startvalue = runif(1)
+chain = run_metropolis_MCMC(startvalue,1, 10000)
+acceptance = 1-mean(duplicated(chain))
+
+par(mfrow=c(1,3))  #1 row, 3 columns
+plot((chain)); acf(chain); hist(chain)  #plot commands
+
+```
+
+
 Gibbs Part
 ```{r}
 Gibbs_<-function(x0,y0,iterations,B=5,burnIn=0)
