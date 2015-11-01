@@ -1,8 +1,9 @@
 ---
 title: "Final 37810"
-author: "Shiting Zhu, Jingli Wang, Jingting Li"
+author: "Shiting Zhu, Lijing Wang, Jingting Li"
 date: "November 1, 2015"
 output: pdf_document
 ---
 
 This is a test
+For 37810
