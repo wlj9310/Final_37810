@@ -7,7 +7,7 @@ output: pdf_document
 
 
 ## Question 1
-<<<<<<< HEAD
+
 ```{r}
 Alpha <- 6
 Beta <- 4
@@ -47,13 +47,10 @@ plot((chain)); acf(chain); hist(chain)  #plot commands
 ```
 
 
+
 Gibbs Part
-=======
-
-
-
 ## Gibbs Sampling
->>>>>>> 4fb46ebe494eace216e7ce160874e244a9399190
+
 ```{r}
 Gibbs_<-function(x0,y0,iterations,B=5,burnIn=0)
 ## 5 parameters are needed in this function, with B=5 and burnIn=0 by default
