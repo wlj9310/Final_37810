@@ -7,17 +7,6 @@ output: pdf_document
 
 
 ## Question 1
-## Metropolis Hastings
-1. The algorithm is Metropolis-Hastings. We first choose the new phi based on the proposal function  
-
-Step 0: Pick a start point $\phi_{0}$, which is a random number from uniform distribution (0,1)
-
-Step 1: Pick a new candidate($\phi_{new}$) from the jumping distribution, which is Beta(c$\phi_{old}$,c(1-$\phi_{old}$)). Notice the $\phi_{new}$ cannot be either 0 or 1, otherwise it will loop in 0 or 1 forever. For this step we used a function called phi in the r code.
-
-Step 2: Calculate the accaptance probability. Since the jumping distribution is not symmetric in this question, so 
-$\frac{P(\phi_{new})}{P(\phi_{n})}$=$\frac{dbeta(\phi_{new},6,4)}{dbeta(\phi_{n},6,4)}$ and
-$\frac{Q(\phi_{new}*|\phi_{n})}{Q(\phi_{n}|\phi_{new})}$=$\frac{dbeta(\phi_{new},c\phi_{n},c(1-\phi_{n}))}{dbeta(\phi_{n},c\phi_{new},c\phi_{new})}\\$
-A($\phi_{n}$->$\phi_{new}$) = min(1,  $\frac{\frac{P(\phi_{new})}{P(\phi_{n})}}{\frac{Q(\phi_{new}*|\phi_{n})}{Q(\phi_{n}|\phi_{new})}}$).
 
 ```{r}
 library(coda)
@@ -145,4 +134,5 @@ Here I start Gibbs sampling with `x0` and `y0`, draw a value $x^{(1)}$ from the 
 To get more samples using Gibbs sampling, continually use the most updated values of $x$ and $y$ when generating samples from conditional distribution. To be more specific, generate $x^{(i+1)}$ from $p(x|y^{(i)})$ and $y^{(i+1)}$ from $p(y|x^{(i+1)})$. Repeat it for $n=$ `iterations` times.  
   
 For the burn-in process, discard the first $m=$ `burnIn` samples from the Markov chain to reduce the influence of starting values on the Markov chain.  
+
 
