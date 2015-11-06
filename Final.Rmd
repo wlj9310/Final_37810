@@ -293,6 +293,8 @@ Steps:
 * 1.For each data, compute the Euclidean distance between it and the center of each cluster. Compare these k distances, find the minimum one and put the data into that cluster. Update the matrix "index" at the same time.  
 * 2.If "changed" is marked as TRUE, continue. If "changed" is marked as FALSE, then the while loop stops.  
 * 3.Recompute the k centers. For each cluster, find all data that are in it and compute the mean of them as the new center.  
+
+
 Finally, return the result of classifying.  
 
 ```{r}
