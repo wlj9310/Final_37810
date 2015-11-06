@@ -160,4 +160,25 @@ In this case, both the conditional distribution of $X|Y$ and $Y|X$ are truncated
 Since $$ p(x|y)\propto ye^{-yx}, 0<x<B  $$ $$p(y|x)\propto xe^{-yx}, 0<y<B$$
 Consider $p(x|y)$ only. To get samples using inverse transform sampling, first we need to figure out the normalizing constant for the conditional pdf and then the inverse function of cdf.  
   
-The normalizing constant can be calculated using the formula $c=\frac{1}{\int f(x|y)\,\mathrm{d}x}$, if $p(x|y)$ $\propto$ $f(x|y)$. In this case, $f(x|y)=ye^{-yx}, 0<x<B$. Therefore $c=\frac{1}{\int_0^B ye^{-yx}\,\mathrm{d}x}=\frac{1}{1-e^{-By}}$.   
+The normalizing constant can be calculated using the formula $c=\frac{1}{\int f(x|y)\,\mathrm{d}x}$, if $p(x|y)$ $\propto$ $f(x|y)$. In this case, $f(x|y)=ye^{-yx}, 0<x<B$. Therefore $c=\frac{1}{\int_0^B ye^{-yx}\,\mathrm{d}x}=\frac{1}{1-e^{-By}}$.  
+
+Then we start to calculate the cdf $H(x|y)$ for $X|Y$.   
+We have $$p(x|y)=\frac{ye^{-yx}}{1-e^{-By}} , 0<x<B $$ 
+Using the formula $F(x)=\int_{-\infty}^x p(z)\,\mathrm{d}z$, we get the cdf of $X|Y$: $$F(x|y)=\frac{1-e^{-xy}}{1-e^{-By}}, 0<x<B$$
+  
+Then we can write down the inverse function of $F(x|y)$, Denote as $F^{-1}(u|y), where  0\leq u\leq 1$.   
+We have: $$F^{-1}(u|y)=-\frac{log(1-u(1-e^{-By}))}{y}, 0\leq u\leq 1$$  
+According to inverse transform sampling, to draw a sample from $p(x|y)$, we first generate $u$ from $Unif[0,1]$, then $x=F^{-1}(u|y)$ is from the conditional distribution of X|Y. 
+  
+We draw samples from $p(y|x)$ using the same method.  
+  
+  
+Now we start generating samples from p(x,y).  
+  
+Here I start Gibbs sampling with `x0` and `y0`, draw a value $x^{(1)}$ from the full conditional $p(x|$ `y0` $)$ using inverse transform sampling. Then use the updated $x^{(1)}$ to draw a sample from  $p(y|x^{(1)})$.  
+  
+To get more samples using Gibbs sampling, continually use the most updated values of $x$ and $y$ when generating samples from conditional distribution. To be more specific, generate $x^{(i+1)}$ from $p(x|y^{(i)})$ and $y^{(i+1)}$ from $p(y|x^{(i+1)})$. Repeat it for $n=$ `iterations` times.  
+  
+For the burn-in process, discard the first $m=$ `burnIn` samples from the Markov chain to reduce the influence of starting values on the Markov chain.  
+
+
