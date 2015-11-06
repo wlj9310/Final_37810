@@ -220,3 +220,71 @@ c(var(mean_500),var(mean_5000),var(mean_50000))
 ```
 As we can see, the mean is around 1.26, as sample size $T$ increases, the variance of the estimator also decreases.
 
+
+
+## Question 3
+## K-Means
+```{r}
+set.seed(1234)
+k_means<-function(data,k){
+  row<-nrow(data)
+  col<-ncol(data)
+  # index matrix stores the classifying result and the Euclidean distance
+  index<-matrix(0,nrow=row,ncol=2)
+  # stores the center of each cluster
+  center<-matrix(0,nrow=k,ncol=col)
+  rand<-as.vector(sample(1:row,size=k))
+  for(i in 1:k){
+    index[rand[i],1]<-i
+    center[i,]<-data[rand[i],]
+    center<-matrix(center,nrow=k,ncol=col)
+  }
+  changed=TRUE
+  while(changed){
+    previous<-c()
+    for(i in 1:row){
+      # set a large initial distance for updating
+      initialDistance<-1e4
+      previous[i]<-index[i,1]
+      # find the most suitable cluster for each data and update the index matrix
+      for(j in 1:k){
+        currentDistance<-sqrt(sum((data[i,]-center[j,])^2))
+        if(currentDistance<initialDistance){
+           initialDistance<-currentDistance
+           index[i,1]<-j
+           index[i,2]<-currentDistance
+        }
+      }
+    }
+    # check if there is change in index matrix
+    for(i in 1:row){
+      if(previous[i]!=index[i,1]){
+        changed<-TRUE
+      break
+      }
+      else
+        changed<-FALSE
+    }
+    # compute new center matrix
+    for(i in 1:k){
+    cluster<-as.matrix(data[index[,1]==i,])
+    center[i,]<-colMeans(cluster)
+    }
+}
+result<-index[,1]
+return(result) 
+}
+```
+
+K-Means algorithm:
+At first, the parameter in k_means function are data that you need to classify and the number of clusters k.
+Define an index matrix "index", the first column of it stores the cluster of every data, and the second column is the Euclidean distance between the data and its cluster's center.
+Define "center" as a matrix to save the center of each cluster, compute all measurements' centers and save them seperately in 13 columns.
+Then we obtain initial centers by finding k random data from the dataset.
+Define "changed" as an index to imply if there is change in classifying, or the first column of "index". If any data has changed its cluster, then mark "changed" as TRUE; if not, mark it as FALSE.
+Next, we start to classify the dataset.
+Steps:
+1.For each data, compute the Euclidean distance between it and the center of each cluster. Compare these k distances, find the minimum one and put the data into that cluster. Update the matrix "index" at the same time.
+2.If "changed" is marked as TRUE, continue. If "changed" is marked as FALSE, then the while loop stops.
+3.Recompute the k centers. For each cluster, find all data that are in it and compute the mean of them as the new center.
+Finally, return the result of classifying.
