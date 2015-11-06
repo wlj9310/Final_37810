@@ -184,7 +184,7 @@ We draw samples from $p(y|x)$ using the same method.
   
 Now we start generating samples from p(x,y).  
   
-Here I start Gibbs sampling with `x0` and `y0`, draw a value $x^{(1)}$ from the full conditional $p(x|$ `y0` $)$ using inverse transform sampling. Then use the updated $x^{(1)}$ to draw a sample from  $p(y|x^{(1)})$.  
+Here we start Gibbs sampling with `x0` and `y0`, draw a value $x^{(1)}$ from the full conditional $p(x|$ `y0` $)$ using inverse transform sampling. Then use the updated $x^{(1)}$ to draw a sample from  $p(y|x^{(1)})$.  
   
 To get more samples using Gibbs sampling, continually use the most updated values of $x$ and $y$ when generating samples from conditional distribution. To be more specific, generate $x^{(i+1)}$ from $p(x|y^{(i)})$ and $y^{(i+1)}$ from $p(y|x^{(i+1)})$. Repeat it for $n=$ `iterations` times.  
   
@@ -280,18 +280,20 @@ return(result)
 }
 ```
 
-K-Means algorithm:
-At first, the parameter in k_means function are data that you need to classify and the number of clusters k.
-Define an index matrix "index", the first column of it stores the cluster of every data, and the second column is the Euclidean distance between the data and its cluster's center.
-Define "center" as a matrix to save the center of each cluster, compute all measurements' centers and save them seperately in 13 columns.
-Then we obtain initial centers by finding k random data from the dataset.
-Define "changed" as an index to imply if there is change in classifying, or the first column of "index". If any data has changed its cluster, then mark "changed" as TRUE; if not, mark it as FALSE.
-Next, we start to classify the dataset.
-Steps:
-1.For each data, compute the Euclidean distance between it and the center of each cluster. Compare these k distances, find the minimum one and put the data into that cluster. Update the matrix "index" at the same time.
-2.If "changed" is marked as TRUE, continue. If "changed" is marked as FALSE, then the while loop stops.
-3.Recompute the k centers. For each cluster, find all data that are in it and compute the mean of them as the new center.
-Finally, return the result of classifying.
+K-Means algorithm:  
+At first, the parameter in k_means function are data that you need to classify and the number of clusters k.  
+Define an index matrix "index", the first column of it stores the cluster of every data, and the second column is the Euclidean distance between the data and its cluster's center.  
+Define "center" as a matrix to save the center of each cluster, compute all measurements' centers and save them seperately in 13 columns.  
+Then we obtain initial centers by finding k random data from the dataset.   
+Define "changed" as an index to imply if there is change in classifying, or the first column of "index". If any data has changed its cluster, then mark "changed" as TRUE; if not, mark it as FALSE.  
+Next, we start to classify the dataset.  
+  
+Steps:  
+
+* 1.For each data, compute the Euclidean distance between it and the center of each cluster. Compare these k distances, find the minimum one and put the data into that cluster. Update the matrix "index" at the same time.  
+* 2.If "changed" is marked as TRUE, continue. If "changed" is marked as FALSE, then the while loop stops.  
+* 3.Recompute the k centers. For each cluster, find all data that are in it and compute the mean of them as the new center.  
+Finally, return the result of classifying.  
 
 ```{r}
 data(wine, package="rattle")
@@ -300,7 +302,8 @@ fit.km<-k_means(data.train,3)
 library("fpc")
 plotcluster(data.train,fit.km)
 ```
-The clusters don't seem well-separated.
+  
+The clusters don't seem well-separated.  
 There are no obvious gaps between clusters, especially, there exists overlapping area.
 
 ```{r}
@@ -308,17 +311,50 @@ confuseTable.km<-table(wine$Type,fit.km)
 library("flexclust")
 randIndex(confuseTable.km)
 ```
-Use randIndex from "flexclust" package to compare the two partitions – one from dataset and one from result of clustering method.
-We can observe that the result is around 0.37, which is far away from 1. So the algorithm doesn't work well.
-Now we use "scale" command for scaling and centering data.
+  
+Use randIndex from "flexclust" package to compare the two partitions – one from dataset and one from result of clustering method.  
+We can observe that the result is around 0.37, which is far away from 1. So the algorithm doesn't work well.  
+Now we use "scale" command for scaling and centering data.  
 ```{r}
 data.trainnew<-scale(wine[-1])
 fit.kmnew<-k_means(data.trainnew,3)
 plotcluster(data.trainnew,fit.kmnew)
 ```
-We can see the data is clustered very well, there are no collapse between clusters. 
+  
+We can see the data is clustered very well, there are no collapse between clusters.   
 ```{r}
 confuseTable.kmnew<-table(wine$Type,fit.kmnew)
 randIndex(confuseTable.kmnew)
 ```
-Using randIndex, the result is quite close to 1, so K-Means works well for classifying wine dataset after scaling the data.
+  
+Using randIndex, the result is quite close to 1, so K-Means works well for classifying wine dataset after scaling the data.  
+  
+```{r}
+data("iris")
+data.train<-iris[-5]
+fit.km<-k_means(data.train,3)
+plotcluster(data.train,fit.km)
+```
+  
+There exists overlapping area obviously. "iris" dataset doesn't be classified well.
+```{r}
+confuseTable.km<-table(iris$Species,fit.km)
+randIndex(confuseTable.km)
+```
+  
+Although the result is greater than 0.5, but it's not very close to 1.  
+Using scaled data to cluster the iris dataset again.
+```{r}
+data.trainnew<-scale(iris[-5])
+fit.kmnew<-k_means(data.trainnew,3)
+plotcluster(data.trainnew,fit.kmnew)
+```
+  
+There still exists overlap.  
+```{r}
+confuseTable.kmnew<-table(iris$Species,fit.kmnew)
+randIndex(confuseTable.kmnew)
+```
+  
+The result is not satisfactory as well, and ARI is even smaller than that before scaling.  
+So K-Means doesn't work well for classifying iris dataset. And scaling is not helpful.    
