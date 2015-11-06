@@ -15,9 +15,11 @@ Step 0: Pick a start point $\phi_{0}$, which is a random number from uniform dis
 Step 1: Pick a new candidate($\phi_{new}$) from the jumping distribution, which is Beta(c$\phi_{old}$,c(1-$\phi_{old}$)). Notice the $\phi_{new}$ cannot be either 0 or 1, otherwise it will loop in 0 or 1 forever. For this step we used a function called phi in the r code.
 
 Step 2: Calculate the accaptance probability. Since the jumping distribution is not symmetric in this question, so 
-$\frac{P(\phi_{new})}{P(\phi_{n})}$=$\frac{dbeta(\phi_{new},6,4)}{dbeta(\phi_{n},6,4)}$ and
-$\frac{Q(\phi_{new}*|\phi_{n})}{Q(\phi_{n}|\phi_{new})}$=$\frac{dbeta(\phi_{new},c\phi_{n},c(1-\phi_{n}))}{dbeta(\phi_{n},c\phi_{new},c\phi_{new})}\\$
-A($\phi_{n}$->$\phi_{new}$) = min(1,  $\frac{\frac{P(\phi_{new})}{P(\phi_{n})}}{\frac{Q(\phi_{new}*|\phi_{n})}{Q(\phi_{n}|\phi_{new})}}$).
+$$\frac{P(\phi_{new})}{P(\phi_{n})}=\frac{dbeta(\phi_{new},6,4)}{dbeta(\phi_{n},6,4)}$$
+
+$$\frac{Q(\phi_{new}*|\phi_{n})}{Q(\phi_{n}|\phi_{new})}=\frac{dbeta(\phi_{new},c\phi_{n},c(1-\phi_{n}))}{dbeta(\phi_{n},c\phi_{new},c\phi_{new})}\\$$
+
+$$A(\phi_{n}->\phi_{new}) = min(1,  \frac{\frac{P(\phi_{new})}{P(\phi_{n})}}{\frac{Q(\phi_{new}*|\phi_{n})}{Q(\phi_{n}|\phi_{new})}})$$.
 
 Step 3: Sample a number from uniform(0,1).If it is more than A($\phi_{n}$->$\phi_{new}$), we accept $\phi_{new}$ and set $\phi_{n+1}$ = $\phi_{new}$. Otherwise, $\phi_{n+1}$ = $\phi_{n}$.
 
