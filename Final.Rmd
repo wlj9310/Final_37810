@@ -12,15 +12,17 @@ output: pdf_document
 library(coda)
 Alpha <- 6
 Beta <- 4
-# phi cannot be 0 or 1
+# Use the proposal function to get new phi, noticeing phi cannot be 0 or 1
 phi <- function(c,oldphi){
   newphi = 0
+  # Making sure new phi is neither 0 nor 1
   while (newphi == 0 || newphi == 1){
   newphi = rbeta(1,c*oldphi,c*(1-oldphi))
   }
   return(newphi)
 }
 
+# 
 run_metropolis_MCMC <- function(startvalue,c,iterations){
   chain = rep(0, iterations+1)
   chain[1] = startvalue
@@ -62,7 +64,6 @@ graph <- function(Cs){
   }
 }
 
-# Always got error complaining figure margins too large, but we can get result in R. I'll attach the result run in R.
 graph(Cs)
 ```
 
