@@ -288,3 +288,33 @@ Steps:
 2.If "changed" is marked as TRUE, continue. If "changed" is marked as FALSE, then the while loop stops.
 3.Recompute the k centers. For each cluster, find all data that are in it and compute the mean of them as the new center.
 Finally, return the result of classifying.
+
+```{r}
+data(wine, package="rattle")
+data.train<-wine[-1]
+fit.km<-k_means(data.train,3)
+library("fpc")
+plotcluster(data.train,fit.km)
+```
+The clusters don't seem well-separated.
+There are no obvious gaps between clusters, especially, there exists overlapping area.
+
+```{r}
+confuseTable.km<-table(wine$Type,fit.km)
+library("flexclust")
+randIndex(confuseTable.km)
+```
+Use randIndex from "flexclust" package to compare the two partitions – one from dataset and one from result of clustering method.
+We can observe that the result is around 0.37, which is far away from 1. So the algorithm doesn't work well.
+Now we use "scale" command for scaling and centering data.
+```{r}
+data.trainnew<-scale(wine[-1])
+fit.kmnew<-k_means(data.trainnew,3)
+plotcluster(data.trainnew,fit.kmnew)
+```
+We can see the data is clustered very well, there are no collapse between clusters. 
+```{r}
+confuseTable.kmnew<-table(wine$Type,fit.kmnew)
+randIndex(confuseTable.kmnew)
+```
+Using randIndex, the result is quite close to 1, so K-Means works well for classifying wine dataset after scaling the data.
