@@ -160,7 +160,8 @@ In this case, both the conditional distribution of $X|Y$ and $Y|X$ are truncated
 Since $$ p(x|y)\propto ye^{-yx}, 0<x<B  $$ $$p(y|x)\propto xe^{-yx}, 0<y<B$$
 Consider $p(x|y)$ only. To get samples using inverse transform sampling, first we need to figure out the normalizing constant for the conditional pdf and then the inverse function of cdf.  
   
-The normalizing constant can be calculated using the formula $c=\frac{1}{\int f(x|y)\,\mathrm{d}x}$, if $p(x|y)$ $\propto$ $f(x|y)$. In this case, $f(x|y)=ye^{-yx}, 0<x<B$. Therefore $c=\frac{1}{\int_0^B ye^{-yx}\,\mathrm{d}x}=\frac{1}{1-e^{-By}}$.  
+The normalizing constant can be calculated using the formula $c=\frac{1}{\int f(x|y)\,\mathrm{d}x}$, if $p(x|y)$ $\propto$ $f(x|y)$. In this case, $f(x|y)=ye^{-yx}, 0<x<B$.  
+Therefore $$c=\frac{1}{\int_0^B ye^{-yx}\,\mathrm{d}x}=\frac{1}{1-e^{-By}}$$.  
 
 Then we start to calculate the cdf $H(x|y)$ for $X|Y$.   
 We have $$p(x|y)=\frac{ye^{-yx}}{1-e^{-By}} , 0<x<B $$ 
